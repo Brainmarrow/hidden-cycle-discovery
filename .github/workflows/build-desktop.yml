@@ -28,8 +28,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Rust
-         uses: dtolnay/rust-toolchain@stable
+            - name: Install Rust
+              uses: dtolnay/rust-toolchain@stable
 
       - name: Install Linux webview deps
         if: matrix.os == 'ubuntu-latest'
