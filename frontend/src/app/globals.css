@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dark terminal / quant theme */
+    --background:        220 15% 8%;
+    --foreground:        210 20% 90%;
+    --card:              220 15% 11%;
+    --card-foreground:   210 20% 88%;
+    --popover:           220 15% 11%;
+    --popover-foreground:210 20% 88%;
+    --primary:           160 80% 50%;
+    --primary-foreground:220 15% 8%;
+    --secondary:         220 15% 18%;
+    --secondary-foreground:210 20% 80%;
+    --muted:             220 15% 16%;
+    --muted-foreground:  210 15% 50%;
+    --accent:            190 90% 45%;
+    --accent-foreground: 220 15% 8%;
+    --destructive:       0 72% 51%;
+    --destructive-foreground:210 20% 90%;
+    --border:            220 15% 20%;
+    --input:             220 15% 14%;
+    --ring:              160 80% 50%;
+    --radius:            0.5rem;
+
+    /* Chart colors */
+    --chart-1: 160 80% 50%;   /* emerald */
+    --chart-2: 190 90% 45%;   /* cyan */
+    --chart-3: 280 70% 65%;   /* violet */
+    --chart-4: 45  95% 55%;   /* amber */
+    --chart-5: 0   72% 51%;   /* red */
+    --chart-6: 210 80% 60%;   /* blue */
+
+    /* Cycle strength colors */
+    --strength-high:   160 80% 50%;
+    --strength-medium: 45  95% 55%;
+    --strength-low:    0   72% 51%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar              { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track        { background: hsl(var(--background)); }
+  ::-webkit-scrollbar-thumb        { background: hsl(var(--border)); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover  { background: hsl(var(--muted-foreground)); }
+}
+
+@layer components {
+  /* Terminal-style monospace blocks */
+  .terminal-block {
+    @apply font-mono text-xs bg-black/40 border border-border rounded p-3;
+    color: hsl(var(--primary));
+  }
+
+  /* Cycle strength badge */
+  .strength-high   { color: hsl(var(--strength-high));   }
+  .strength-medium { color: hsl(var(--strength-medium)); }
+  .strength-low    { color: hsl(var(--strength-low));    }
+
+  /* Glowing card for key findings */
+  .glow-card {
+    @apply relative border border-primary/30 rounded-lg p-4;
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.08);
+  }
+  .glow-card::before {
+    content: '';
+    @apply absolute inset-0 rounded-lg;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.05), transparent);
+    pointer-events: none;
+  }
+
+  /* Animated scan line effect for loading */
+  @keyframes scan {
+    0%   { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
+  .scan-line {
+    @apply absolute left-0 right-0 h-px;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.5), transparent);
+    animation: scan 2s linear infinite;
+  }
+
+  /* Heatmap cell */
+  .heatmap-cell {
+    @apply cursor-pointer transition-opacity hover:opacity-80;
+  }
+
+  /* Cycle wheel SVG text */
+  .cycle-label { @apply text-xs fill-muted-foreground font-mono; }
+
+  /* Progress bar for job status */
+  .job-progress-bar {
+    @apply h-1 rounded-full bg-primary/20 overflow-hidden;
+  }
+  .job-progress-fill {
+    @apply h-full rounded-full bg-primary transition-all duration-500;
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)));
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .border-gradient {
+    border: 1px solid transparent;
+    background: linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box,
+                linear-gradient(135deg, hsl(var(--primary) / 0.5), hsl(var(--accent) / 0.5)) border-box;
+  }
+
+  .glass {
+    background: hsl(var(--card) / 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}

@@ -1,0 +1,95 @@
+# ═══════════════════════════════════════════════════════════════════
+# LITE REQUIREMENTS — for running locally on a low-RAM machine (≤4GB)
+# ═══════════════════════════════════════════════════════════════════
+# What this drops vs. requirements.txt, and why:
+#   • torch / torchvision / torchaudio  — ~2.5GB install, GBs of RAM to
+#     import and run. Disables the AI Models module (autoencoder/
+#     transformer/LSTM/TCN). Everything else still works.
+#   • asyncpg / psycopg2-binary          — Postgres drivers; SQLite
+#     (aiosqlite) is used instead, no server needed.
+#   • redis / celery[redis] real broker  — fakeredis + Celery eager
+#     mode replace them; no Redis server needed.
+#   • tsfresh, shap, lime                — heavy, spawn many worker
+#     processes; feature_engine still works via RF/MI/F-test ranking.
+#   • hdbscan                            — needs a C compiler on
+#     Windows; KMeans/DTW clustering in pattern_discovery is unaffected.
+#   • weasyprint                         — needs system Cairo/Pango
+#     libs, painful on Windows; reportlab alone still produces PDFs.
+#   • boto3 / aioboto3                   — S3 SDK; local disk storage
+#     is used instead in desktop mode.
+#
+# Everything below still gives you: preprocessing, cycle detection
+# (FFT/Lomb-Scargle/wavelet/ACF/Hilbert/Hurst), pattern discovery
+# (KMeans/DTW/matrix-profile/HMM regimes), planetary correlations,
+# 1000+ features (minus SHAP explainability), historical analogs,
+# and stability testing.
+
+# ─── Web Framework ────────────────────────────
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+websockets==12.0
+sse-starlette==2.1.0
+
+# ─── Database (SQLite, no server) ─────────────
+sqlalchemy[asyncio]==2.0.30
+aiosqlite==0.20.0
+alembic==1.13.1
+
+# ─── In-process cache / eager task queue ──────
+fakeredis==2.23.2
+celery==5.4.0
+kombu==5.3.5
+
+# ─── Auth / Security ──────────────────────────
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.1
+
+# ─── Validation ───────────────────────────────
+pydantic==2.7.1
+pydantic-settings==2.2.1
+email-validator==2.1.1
+
+# ─── HTTP Client ──────────────────────────────
+httpx==0.27.0
+
+# ─── Scientific Computing (core) ──────────────
+numpy==1.26.4
+pandas==2.2.2
+scipy==1.13.0
+scikit-learn==1.4.2
+statsmodels==0.14.2
+PyWavelets==1.6.0
+
+# ─── Time Series / Pattern Discovery ──────────
+dtaidistance==2.3.12
+fastdtw==0.3.4
+stumpy==1.13.0
+antropy==0.1.6
+hmmlearn==0.3.2
+
+# ─── Spectral Analysis ────────────────────────
+astropy==6.1.0        # Lomb-Scargle
+
+# ─── Planetary / Ephemeris ────────────────────
+ephem==4.1.5
+
+# ─── Feature Engineering (no SHAP/tsfresh) ────
+featuretools==1.31.0
+
+# ─── Reporting (reportlab only, no weasyprint) ─
+reportlab==4.2.0
+jinja2==3.1.4
+
+# ─── Logging / Metrics (lightweight, imported eagerly by main.py) ─
+structlog==24.1.0
+prometheus-client==0.20.0
+
+# ─── Data Sources ──────────────────────────────
+yfinance==0.2.38
+ccxt==4.3.27
+
+# ─── Testing (optional, install if you want `pytest`) ─
+pytest==8.2.0
+pytest-asyncio==0.23.6

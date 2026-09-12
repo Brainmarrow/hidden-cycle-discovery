@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Cycle Discovery Lite",
+  "version": "1.0.0",
+  "identifier": "ai.hcd.lite",
+  "build": {
+    "frontendDist": "../ui"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Cycle Discovery Lite",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 900,
+        "minHeight": 600,
+        "backgroundColor": "#0b0e14"
+      }
+    ],
+    "security": { "csp": null }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["msi", "dmg", "appimage", "deb"],
+    "icon": ["icons/icon.ico", "icons/icon.icns", "icons/icon.png"]
+  }
+}

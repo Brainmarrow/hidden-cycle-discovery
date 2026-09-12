@@ -1,0 +1,35 @@
+{
+  "name": "hidden-cycle-discovery-desktop",
+  "version": "1.0.0",
+  "description": "Hidden Cycle Discovery — desktop app",
+  "main": "main.js",
+  "author": "HCD",
+  "license": "MIT",
+  "scripts": {
+    "dev": "electron .",
+    "build:engine": "cd ../../backend && pyinstaller --clean hcd-engine.spec && node ../desktop/electron/scripts/copy-engine.js",
+    "build:ui": "cd ../../frontend && npm run build && node ../desktop/electron/scripts/copy-ui.js",
+    "dist": "npm run build:engine && npm run build:ui && electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux"
+  },
+  "devDependencies": {
+    "electron": "31.0.0",
+    "electron-builder": "24.13.3"
+  },
+  "build": {
+    "appId": "ai.hcd.desktop",
+    "productName": "Hidden Cycle Discovery",
+    "directories": { "output": "dist" },
+    "files": ["main.js", "preload.js"],
+    "extraResources": [
+      { "from": "../resources/engine", "to": "engine" },
+      { "from": "../resources/ui", "to": "ui" }
+    ],
+    "win":   { "target": ["nsis"], "icon": "../resources/icon.ico" },
+    "mac":   { "target": ["dmg"],  "icon": "../resources/icon.icns", "category": "public.app-category.finance" },
+    "linux": { "target": ["AppImage", "deb"], "icon": "../resources/icon.png", "category": "Finance" },
+    "nsis":  { "oneClick": false, "allowToChangeInstallationDirectory": true }
+  }
+}

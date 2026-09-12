@@ -1,0 +1,4 @@
+# Extra deps for the desktop build only
+-r requirements.txt
+aiosqlite==0.20.0
+pyinstaller==6.8.0
