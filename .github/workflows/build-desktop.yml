@@ -28,8 +28,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-            - name: Install Rust
-              uses: dtolnay/rust-toolchain@stable
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Install Linux webview deps
         if: matrix.os == 'ubuntu-latest'
@@ -102,6 +102,8 @@ jobs:
       - name: Build static frontend export
         working-directory: frontend
         run: npm run build
+        env:
+          DESKTOP_BUILD: "1"
 
       - name: Copy UI into desktop resources
         run: node desktop/electron/scripts/copy-ui.js

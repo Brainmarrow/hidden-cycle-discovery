@@ -114,7 +114,7 @@ export function CycleResultsPanel() {
               labelFormatter={(label) => `Period: ${label}`}
             />
             <Bar dataKey="strength" name="Strength" radius={[2, 2, 0, 0]}>
-              {chartData.map((entry, index) => (
+              {chartData.map((entry: { strength: number }, index: number) => (
                 <Cell key={index} fill={strengthColor(entry.strength / 100)} />
               ))}
             </Bar>
