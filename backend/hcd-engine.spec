@@ -30,6 +30,15 @@ hiddenimports += [
     "aiosqlite", "passlib.handlers.bcrypt",
     "app", "app.main",
 ] + collect_submodules("app")
+   # Some packages (e.g. statsmodels, which ships data files like
+   # "pss-critical-values..." alongside its .py modules) confuse
+   # collect_submodules/collect_all into emitting entries that aren't valid
+   # Python module names (they contain hyphens, dots-in-the-wrong-place, etc.).
+   # PyInstaller correctly rejects those with a hard error, so filter them out
+   # here rather than chasing down every offending package by hand.
+   import re
+   _valid_module = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)*$")
+   hiddenimports = sorted(set(h for h in hiddenimports if _valid_module.match(h)))
 
 a = Analysis(
     ["desktop_main.py"],
