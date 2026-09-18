@@ -58,6 +58,43 @@ jobs:
           if-no-files-found: warn
 
   # ─────────────────────────────────────────────────────────────────
+  # LITE — 32-BIT WINDOWS — same app, cross-compiled for 32-bit Windows.
+  # This is the version that actually installs on a true 32-bit PC —
+  # the standard windows-latest builds above produce 64-bit installers,
+  # which won't run on 32-bit Windows at all.
+  # ─────────────────────────────────────────────────────────────────
+  build-lite-32bit:
+    name: Build Lite (Tauri) — windows 32-bit
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust (with 32-bit Windows target)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: i686-pc-windows-msvc
+
+      - name: Install Tauri CLI
+        run: cargo install tauri-cli --version "^2" --locked
+
+      - name: Build 32-bit Lite installer
+        working-directory: desktop/tauri-lite/src-tauri
+        run: cargo tauri build --target i686-pc-windows-msvc
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cycle-discovery-lite-windows-32bit
+          path: |
+            desktop/tauri-lite/src-tauri/target/i686-pc-windows-msvc/release/bundle/msi/*.msi
+            desktop/tauri-lite/src-tauri/target/i686-pc-windows-msvc/release/bundle/nsis/*.exe
+          if-no-files-found: warn
+
+   # NOTE: cannot be built as 32-bit — PyTorch has never published a
+   # 32-bit Windows wheel, and SciPy dropped 32-bit Windows wheels at
+   # v1.8.0. This is a hard limitation of those libraries, not a build
+   # config issue, so this job only ever produces a 64-bit installer.
+  # ─────────────────────────────────────────────────────────────────
   # FULL — Electron shell + PyInstaller-frozen Python engine
   # This is the step that needs real RAM/CPU (freezing scipy/torch) —
   # it runs entirely on GitHub's servers, never on your PC.
